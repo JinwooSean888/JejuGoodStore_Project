@@ -62,6 +62,12 @@ class Store(BaseModel):
 
 class GoodStoreRequest(BaseModel):
     address: str
+    category: str
+    price_range: int
+    district: str
+
+    
+    
 
 # --- 샘플 데이터 ---
 
@@ -150,13 +156,24 @@ async def chat(request: ChatRequest):
 
 @app.post("/api/good-store")
 async def good_store(request: GoodStoreRequest):
-    address = request.address
-    if not address:
-        raise JSONResponse(status_code=400, content="주소를 제공해 주세요.")
 
-    filtered_stores = [store for store in stores if address in store.address]
+    # 조건별로 필터링
+    
+    filtered_stores = stores
 
-    if filtered_stores:
-        return {"success": True, "stores": filtered_stores}
-    else:
-        return {"success": False, "message": "해당하는 착한 가게가 없습니다."}
+    if request.address:
+        filtered_stores = [store for store in filtered_stores if request.address in store["address"]]
+
+    if request.category:
+        filtered_stores = [store for store in filtered_stores if store["category"] == request.category]
+
+    if request.district:
+        filtered_stores = [store for store in filtered_stores if store["price_range"] == request.district]
+
+    if request.price_range :
+        filtered_stores = [store for store in filtered_stores if store["rating"] <= request.price_range]
+    # 빈 리스트는 조건문에서 false 인대 not false 는 True 라서 : 빈 리스트일 때 발생  
+    if not filtered_stores:
+        return JSONResponse(status_code=404, content="조건에 맞는 가게가 없습니다.")
+
+    return filtered_stores

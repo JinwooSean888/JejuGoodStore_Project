@@ -14,7 +14,7 @@ app.post("/ask", async (req, res) => {
 
     // 예시: DB에서 가게명 전부 불러오기
     const [rows] = await dbPool.query(
-      "SELECT bsshNm, bsshTelno, prdlstCn FROM shops"
+      "SELECT bsshNm, bsshTelno, prdlstCn FROM shops where indutyType = 1"
     );
     const shopList = rows
       .map((r) => `${r.bsshNm} (메뉴: ${r.prdlstCn})`)
