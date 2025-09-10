@@ -10,11 +10,13 @@ const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 app.post("/ask", async (req, res) => {
   try {
-    const { question } = req.body;
+    const { question, filters } = req.body;
+    const { indutyType, emdType, prdlstCn } = filters || {};
 
     // 예시: DB에서 가게명 전부 불러오기
     const [rows] = await dbPool.query(
-      "SELECT bsshNm, bsshTelno, prdlstCn FROM shops where indutyType = 1"
+      "SELECT bsshNm, bsshTelno, prdlstCn FROM shops where indutyType = ? and emdNm = ?;",
+      [indutyType, emdType] // 값은 배열로 전달
     );
     const shopList = rows
       .map((r) => `${r.bsshNm} (메뉴: ${r.prdlstCn})`)
@@ -32,10 +34,10 @@ app.post("/ask", async (req, res) => {
     const result = await model.generateContent(prompt);
     const answer = result.response.text();
 
-    res.json({ answer });
+    return res.status(200).json({ answer });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "서버 에러" });
+    return res.status(500).json({ error: "서버 에러" });
   }
 });
 
