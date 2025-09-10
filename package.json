@@ -1,0 +1,33 @@
+{
+  "name": "mini_project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "fastapi": "^0.0.8",
+    "mysql2": "^3.14.5",
+    "openai": "^5.20.0",
+    "pandas": "^0.0.3",
+    "requests": "^0.3.0",
+    "uvicorn": "^0.0.1-security"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JinwooSean888/JejuGoodStore_Project.git"
+  },
+  "bugs": {
+    "url": "https://github.com/JinwooSean888/JejuGoodStore_Project/issues"
+  },
+  "homepage": "https://github.com/JinwooSean888/JejuGoodStore_Project#readme"
+}

@@ -2,22 +2,21 @@
 
 import numpy as np 
 import uvicorn, os, cv2
+import pandas as pd
+import tensorflow as tf
+
 from typing import List
 from fastapi import FastAPI, status, UploadFile, File
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import create_engine, text
-import tensorflow as tf
-import pandas as pd
-
 
 data = []
-df = pd.read_xml("https://www.seogwipo.go.kr/openapi/goodPriceService/", xpath=".//item")
+#df = pd.read_xml("https://www.seogwipo.go.kr/openapi/goodPriceService/", xpath=".//item")
 engine = create_engine("mysql+pymysql://root:test@localhost:3307/auth")
 df.to_sql(name="shops", con=engine, if_exists="replace", index=False)
+
+df = pd.read_csv("C:/Mini_Project/제주시 착한가게 현황.csv", encoding="cp949")
 print(df)
 
-engine = create_engine("mysql+pymysql://root:비밀번호@localhost:3306/testdb", encoding="utf-8")
-
-df.to_sql(name="shops", con=engine, if_exists="replace", index=False)
 print("데이터 저장 완료!")
