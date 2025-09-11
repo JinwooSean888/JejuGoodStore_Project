@@ -17,12 +17,13 @@ app.post("/ask", async (req, res) => {
 
     // 예시: DB에서 가게명 전부 불러오기
     const [rows] = await dbPool.query(
-      "SELECT bsshNm, bsshTelno, prdlstCn FROM shops where indutyType = ? and emdNm = ?;",
+      "SELECT bsshNm, bsshTelno, prdlstCn FROM shops where indutyType = ? and emdType = ?;",
       [indutyType, emdType] // 값은 배열로 전달
     );
     const shopList = rows
       .map((r) => `${r.bsshNm} (메뉴: ${r.prdlstCn})`)
       .join("\n");
+    // console.log("DB에서 불러온 가게 리스트:", shopList);
     // Gemini 호출
     const prompt = `
     사용자가 질문: "${question}"
