@@ -1,10 +1,12 @@
 import express from "express";
 import { dbPool } from "./dbConfig.js";
 import { genAI } from "./geminiClient.js";
+import cors from "cors";
 
 const app = express();
 app.use(express.json());
 
+app.use(cors({ origin: ["http://localhost:3000"] }));
 // DB → Gemini → 응답
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
@@ -41,6 +43,6 @@ app.post("/ask", async (req, res) => {
   }
 });
 
-app.listen(3000, () => {
-  console.log("🚀 Server running on http://localhost:3000");
+app.listen(8000, () => {
+  console.log("🚀 Server running on http://localhost:8000");
 });
