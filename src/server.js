@@ -13,12 +13,16 @@ const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 app.post("/ask", async (req, res) => {
   try {
     const { question, filters } = req.body;
-    const { indutyType, emdType, prdlstCn } = filters || {};
-
-    // 예시: DB에서 가게명 전부 불러오기
+    const { indutyType, emdType } = filters || {};
+    console.log(indutyType);
+    // DB 조회 (프리페어드 스테이트먼트 사용)
     const [rows] = await dbPool.query(
-      "SELECT bsshNm, bsshTelno, prdlstCn FROM shops where indutyType = ? and emdType = ?;",
-      [indutyType, emdType] // 값은 배열로 전달
+      `SELECT * 
+       FROM auth.shops 
+       WHERE indutyType = ? 
+         AND emdType = ? 
+         AND prdlstCn LIKE ?;`,
+      [indutyType, emdType, `%${question}%`] // ✅ LIKE 검색 안전하게 처리
     );
     const shopList = rows
       .map((r) => `${r.bsshNm} (메뉴: ${r.prdlstCn})`)
