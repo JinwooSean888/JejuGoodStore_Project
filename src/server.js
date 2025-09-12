@@ -6,7 +6,9 @@ import cors from "cors";
 const app = express();
 app.use(express.json());
 
-app.use(cors({ origin: ["http://localhost:3000"] }));
+app.use(
+  cors({ origin: ["http://localhost:3000", "http://192.168.0.51:3000"] })
+);
 // DB → Gemini → 응답
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
@@ -41,7 +43,7 @@ app.post("/ask", async (req, res) => {
     const result = await model.generateContent(prompt);
     const answer = result.response.text();
 
-    return res.status(200).json({ answer });
+    return res.status(200).json({ answer, rows });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: "서버 에러" });
